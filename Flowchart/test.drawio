@@ -1,0 +1,166 @@
+<mxfile host="app.diagrams.net" modified="2025-06-28T20:11:00.000Z" agent="Grok 3" version="1.0" etag="example" type="device">
+  <diagram id="diagram_1" name="AHT25 Flowchart">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="start" value="開始" style="start;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="50" width="100" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="currentTime" value="currentTime = millis()" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="120" width="120" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="state0_check" value="状態 == 0 ?" style="diamond;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="190" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="state0_action" value="Wire.begin()&lt;br&gt;NextTime = currentTime + 100&lt;br&gt;状態 = 1" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="300" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="state1_check" value="状態 == 1 &amp;&amp;&lt;br&gt;currentTime ≥ NextTime ?" style="diamond;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="300" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="state1_action" value="Wire.beginTransmission(AHT25_ADDR)&lt;br&gt;Wire.write(0x71)&lt;br&gt;Wire.endTransmission()&lt;br&gt;NextTime = currentTime + 10&lt;br&gt;状態 = 2" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="300" width="120" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="state2_check" value="状態 == 2 &amp;&amp;&lt;br&gt;currentTime ≥ NextTime ?" style="diamond;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="420" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="state2_action" value="CRC 設定&lt;br&gt;状態 = 3" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="420" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="state3_check" value="状態 == 3 &amp;&amp;&lt;br&gt;currentTime ≥ NextTime ?" style="diamond;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="540" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="state3_action" value="測定コマンド送信&lt;br&gt;NextTime = currentTime + 80&lt;br&gt;状態 = 4" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="540" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="state4_check" value="状態 == 4 &amp;&amp;&lt;br&gt;currentTime ≥ NextTime ?" style="diamond;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="660" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="read_data" value="7バイト読み取り" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="760" width="120" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="busy_check" value="センサー ビジー ?" style="diamond;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="820" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="busy_action" value="NextTime = currentTime + 80&lt;br&gt;状態 = 4" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="820" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="crc_check" value="CRC 一致 ?" style="diamond;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="920" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="crc_ok" value="湿度・温度計算&lt;br&gt;不快指数計算&lt;br&gt;シリアル出力&lt;br&gt;NextTime = currentTime + 920&lt;br&gt;状態 = 3" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="920" width="120" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="crc_error" value="エラー値設定&lt;br&gt;シリアル出力&lt;br&gt;NextTime = currentTime + 920&lt;br&gt;状態 = 3" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="920" width="120" height="100" as="geometry"/>
+        </mxCell>
+        <!-- Edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="start" target="currentTime">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="currentTime" target="state0_check">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="はい" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="state0_check" target="state0_action">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="いいえ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="state0_check" target="state1_check">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" value="はい" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="state1_check" target="state1_action">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" value="いいえ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="state1_check" target="state2_check">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" value="はい" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="state2_check" target="state2_action">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" value="いいえ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="state2_check" target="state3_check">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" value="はい" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="state3_check" target="state3_action">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" value="いいえ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="state3_check" target="state4_check">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e11" value="はい" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="state4_check" target="read_data">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="read_data" target="busy_check">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e13" value="はい" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="busy_check" target="busy_action">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e14" value="いいえ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="busy_check" target="crc_check">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e15" value="はい" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="crc_check" target="crc_ok">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e16" value="いいえ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="crc_check" target="crc_error">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="crc_ok" target="state3_check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="1020"/>
+              <mxPoint x="610" y="540"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="crc_error" target="state3_check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="1020"/>
+              <mxPoint x="310" y="540"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="busy_action" target="state4_check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="880"/>
+              <mxPoint x="310" y="660"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="state0_action" target="state1_check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="380"/>
+              <mxPoint x="310" y="300"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="state1_action" target="state2_check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="400"/>
+              <mxPoint x="610" y="420"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="state2_action" target="state3_check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="480"/>
+              <mxPoint x="610" y="540"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="state3_action" target="state4_check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="620"/>
+              <mxPoint x="610" y="660"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
