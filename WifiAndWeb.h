@@ -93,6 +93,7 @@ void serveWeb(){
     HTML += "    <p>気温:"; HTML += AHT25value.temperature; HTML += "℃</p>";
     HTML += "    <p>湿度:"; HTML += AHT25value.humidity; HTML += "%</p>";
     HTML += "    <p>不快指数:"; HTML += AHT25value.discomfortIndex; HTML += "</p>";
+    HTML += "    <p>エラーメッセージ:"; HTML += AHT25value.errorMessage; HTML += "</p>";
     HTML += "</body>";
     HTML += "</html>";
     

@@ -17,7 +17,7 @@ void loop() {
 
   /** Get tempereture and humidy values from AHT25 */
   AHT25();
-  
+
   /** Wifi and Web Server */
   WifiAndWeb();
 
