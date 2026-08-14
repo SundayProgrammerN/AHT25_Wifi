@@ -126,7 +126,7 @@ void serveWeb(){
     Serial.print("json data = ");Serial.println(json);
     Serial.println("-------------------");
     server.sendHeader("Access-Control-Allow-Origin", "*");
-    server.send(200, "text/json", json); // 値をクライアントに返す
+    server.send(200, "application/json; charset=utf-8", json); // 値をクライアントに返す
 
   });
 }
