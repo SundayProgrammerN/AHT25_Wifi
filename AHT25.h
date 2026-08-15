@@ -1,5 +1,11 @@
-#include <Wire.h>
-#include <CRC8.h>
+#ifndef WIRE_HEADER
+  #define WIRE_HEADER
+  #include <Wire.h>
+#endif 
+#ifndef CRC8_HEADER
+  #define CRC8_HEADER
+  #include <CRC8.h>
+#endif 
 
 /** AHT25 setting value */
 struct {
@@ -53,7 +59,6 @@ void AHT25(){
     // Pin Initializing
     Serial.println("");
     Serial.print("millis: "); Serial.print(currentTime);Serial.println(" Status: Pin Initializing");
-    Wire.begin(AHT25_PIN_I2C_SDA, AHT25_PIN_I2C_SCL);
 
     AHT25value.NextTime = currentTime + 100;
     AHT25value.Status = AHT25_Sending_Getting_Status_Code;
