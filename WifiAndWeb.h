@@ -41,7 +41,7 @@ void WifiAndWeb(){
 
       WifiValue.WIFI_SSID = String(ssid);
 
-      Serial.print("ssid : ");Serial.println(WifiValue.WIFI_SSID);
+      // Serial.print("ssid : ");Serial.println(WifiValue.WIFI_SSID);
 
       WifiValue.Status = 1;
       WifiValue.NextTime = currentTime + 100;

@@ -27,7 +27,7 @@ byte readCurrent(byte device_addr){
     buf = Wire.read();
   }
 
-    Serial.print("readcurrent : ");Serial.println((char)buf);
+    // Serial.print("readcurrent : ");Serial.println((char)buf);
 
   return buf;
 }
@@ -168,7 +168,7 @@ int writePage(byte device_addr, byte high_address, byte low_address, byte words[
   
   for(int i = 0; i < length; i++){
     Wire.write(words[i]);
-    Serial.print(words[i]);
+    // Serial.print(words[i]);
   }
 
   
