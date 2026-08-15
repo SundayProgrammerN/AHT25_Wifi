@@ -1,12 +1,18 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <esp_mac.h>
+#ifndef EEPROM24LC256RW_HEADER
+  #define EEPROM24LC256RW_HEADER
+  #include "24LC256RW.h"
+#endif 
 
 /** Wifi setting value */
 struct{
   unsigned long NextTime = 0;
   int Status = 0;
   int TryCount = 0;
+  String WIFI_SSID;
+  String WIFI_PASSWORD;
 } WifiValue;
 
 /** Web setting value */
@@ -19,12 +25,47 @@ void WifiAndWeb(){
 
   uint8_t baseMac[6];
   char baseMacChr[18] = {0};
+  char ssid[14] = {0};   // 12文字 + 終端
+  char pw[12] = {0};   // 12文字 + 終端
 
   switch(WifiValue.Status){
-    case 0:// Initializing
+    case 0:// Read SSID
       Serial.println("-------------------");
-      Serial.print("Wifi SSID     : ");Serial.println(WIFI_SSID);
-      Serial.print("Wifi Password : ");Serial.println(WIFI_PASSWORD);
+      Serial.println("Read Wifi setting from 24LC256RW");
+      Serial.println("-------------------");
+
+      for (int i = 0; i < 13; i++) {
+        ssid[i] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, i);
+      }
+      ssid[13] = '\0';      // 終端を明示
+
+      WifiValue.WIFI_SSID = String(ssid);
+
+      // Serial.print("ssid : ");Serial.println(WifiValue.WIFI_SSID);
+
+      WifiValue.Status = 1;
+      WifiValue.NextTime = currentTime + 100;
+
+    case 1:// Read PW
+      if(currentTime < WifiValue.NextTime) break;
+      pw[0] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, 0x00);
+
+      for(int i = 0; i < 12 ; i++){
+        pw[i] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, (0x30 + i));
+      }
+
+      pw[12] = '\0';
+
+      WifiValue.WIFI_PASSWORD = (String)pw;
+
+      WifiValue.Status = 10;
+      WifiValue.NextTime = currentTime + 100;
+
+    case 10:// Initializing
+      if(currentTime < WifiValue.NextTime) break;
+      Serial.println("-------------------");
+      Serial.print("Wifi SSID     : ");Serial.println(WifiValue.WIFI_SSID);
+      Serial.print("Wifi Password : ");Serial.println(WifiValue.WIFI_PASSWORD);
 
       // Get MAC address for WiFi station
       esp_read_mac(baseMac, ESP_MAC_WIFI_STA);
@@ -34,10 +75,10 @@ void WifiAndWeb(){
       Serial.println("-------------------");
 
       WifiValue.TryCount = 0;
-      WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-      WifiValue.Status = 1;
+      WiFi.begin(WifiValue.WIFI_SSID, WifiValue.WIFI_PASSWORD);
+      WifiValue.Status = 20;
 
-    case 1:// Trying connect
+    case 20:// Trying connect
       if(currentTime < WifiValue.NextTime) break;
       if(WifiValue.TryCount == 0){
         Serial.println("Trying wifi connect...");
@@ -126,7 +167,7 @@ void serveWeb(){
     Serial.print("json data = ");Serial.println(json);
     Serial.println("-------------------");
     server.sendHeader("Access-Control-Allow-Origin", "*");
-    server.send(200, "text/json", json); // 値をクライアントに返す
+    server.send(200, "application/json; charset=utf-8", json); // 値をクライアントに返す
 
   });
 }
