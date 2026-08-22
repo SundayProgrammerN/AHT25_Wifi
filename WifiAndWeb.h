@@ -48,7 +48,7 @@ void WifiAndWeb(){
 
     case 1:// Read PW
       if(currentTime < WifiValue.NextTime) break;
-      pw[0] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, 0x00);
+      // pw[0] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, 0x00);
 
       for(int i = 0; i < 12 ; i++){
         pw[i] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, (0x30 + i));
