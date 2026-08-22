@@ -20,5 +20,21 @@
 
 #ifndef WIRE_HEADER
   #define WIRE_HEADER
+  #define PAGE_SIZE 64
   #include <Wire.h>
 #endif 
+
+#ifndef EEPROM
+  #define EEPROM
+  #include "EEPROM.h"
+#endif 
+
+void initialSerial(){
+  /** Serial initializing */
+  Serial.begin(SERIAL_BAUDRATE);
+  Serial.println("-------------------");
+  Serial.println("AHT25_Wifi");
+  Serial.println("Created by H.N");
+  Serial.println("-------------------");
+  Serial.print("TIME_LIMIT   : ");Serial.println(TIME_LIMIT);
+}
