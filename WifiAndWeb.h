@@ -30,17 +30,16 @@ void WifiAndWeb(){
   uint8_t baseMac[6];
   char baseMacChr[18] = {0};
 
-  byte ssidBuf[33] = {'\0'};
-  byte pwBuf[65] = {'\0'};
-
   switch(WifiValue.Status){
-    case 0:// Read SSID
+    case 0:// Initializing
       Serial.println("-------------------");
       Serial.println("Read Wifi setting from EEPROM");
       Serial.println("-------------------");
 
+      //Read Wifi SSID from EEPROM
       WifiValue.WIFI_SSID = receiveSSID();
 
+      //Read Wifi Password from EEPROM
       WifiValue.WIFI_PASSWORD = receivePassword();
 
       Serial.println("-------------------");
