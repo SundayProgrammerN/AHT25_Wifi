@@ -20,7 +20,7 @@
 
 #ifndef WIRE_HEADER
   #define WIRE_HEADER
-  #define PAGE_SIZE 64
+  #define PAGE_SIZE 64 // TODO:24LC256RWのページサイズ。のちのち削除
   #include <Wire.h>
 #endif 
 
@@ -28,6 +28,10 @@
   #define EEPROM
   #include "EEPROM.h"
 #endif 
+
+void setI2CPins() {
+  Wire.begin(AHT25_PIN_I2C_SDA, AHT25_PIN_I2C_SCL);
+}
 
 void initialSerial(){
   /** Serial initializing */

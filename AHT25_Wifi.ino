@@ -5,7 +5,8 @@ void setup() {
   /** Serial initializing */
   initialSerial();
 
-  Wire.begin(AHT25_PIN_I2C_SDA, AHT25_PIN_I2C_SCL);
+  /** I2C pins initializing */
+  setI2CPins();
 
   /** Wifi and Web Server initializing */
   serveWeb();
