@@ -218,7 +218,7 @@ byte sendReadByAddress(byte device_addr, byte high_address, byte low_address){
 /** @brief 指定されたアドレスから1バイトを読み込む処理を実行する。あらかじめ読み込み命令を送信している必要がある。
  *
  * @param device_addr I2Cデバイスのスレーブアドレス
- * @return 読み込んだ1バイトのデータ
+ * @return 読み込んだ1バイトのデータ(読み込めなかった場合はNULLを返す)
  */
 byte receiveRead1byte(byte device_addr){
 
@@ -229,6 +229,8 @@ byte receiveRead1byte(byte device_addr){
   if (Wire.available() >= 1) {
     buf = Wire.read();
     
+  }else{
+    return NULL;
   }
 
   return buf;
@@ -248,7 +250,7 @@ void receiveReadxbytes(byte device_addr, uint8_t x, byte* outBuf){
   // 返信
   Wire.requestFrom(device_addr,x);
 
-  if (Wire.available() >= 1) {
+  if (Wire.available() >= x) {
     for(int i = 0; i < x ; i++){
       temp[i] = Wire.read();
       // Serial.print((char)outBuf[i]);
