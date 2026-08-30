@@ -1,10 +1,6 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <esp_mac.h>
-// #ifndef EEPROM24LC256RW_HEADER
-//   #define EEPROM24LC256RW_HEADER
-//   #include "24LC256RW.h"
-// #endif 
 #ifndef EEPROM
   #define EEPROM
   #include "EEPROM.h"
