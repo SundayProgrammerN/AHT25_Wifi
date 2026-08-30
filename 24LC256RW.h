@@ -156,7 +156,7 @@ int write1byte(byte device_addr, byte high_address, byte low_address, byte word)
  *
  * @note 1ページ境界を超えない範囲で書き込むこと
  */
-int writePage(byte device_addr, byte high_address, byte low_address, byte words[], uint8_t length){
+byte writePage(byte device_addr, byte high_address, byte low_address, byte words[], uint8_t length){
 
   if(length > PAGE_SIZE){
     return -1;
@@ -178,11 +178,17 @@ int writePage(byte device_addr, byte high_address, byte low_address, byte words[
 /** @brief アドレスカウンタを元に、現在のアドレスから読み込む命令を送信する
  *
  * @param device_addr I2Cデバイスのスレーブアドレス
+ * @return Wire.endTransmission() の戻り値
+ *         0: 成功
+ *         1: データ長不足
+ *         2: アドレス送信失敗
+ *         3: ACK受信失敗
+ *         4: その他のエラー
  */
-void sendReadCurrent(byte device_addr){
+byte sendReadCurrent(byte device_addr){
 
   Wire.beginTransmission(device_addr);
-  Wire.endTransmission();
+  return Wire.endTransmission();
 
 }
 
@@ -191,15 +197,21 @@ void sendReadCurrent(byte device_addr){
  * @param device_addr I2Cデバイスのスレーブアドレス
  * @param high_address 読み込み開始アドレスの高位バイト
  * @param low_address 読み込み開始アドレスの低位バイト
+ * @return Wire.endTransmission() の戻り値
+ *         0: 成功
+ *         1: データ長不足
+ *         2: アドレス送信失敗
+ *         3: ACK受信失敗
+ *         4: その他のエラー
  */
-void sendReadByAddress(byte device_addr, byte high_address, byte low_address){
+byte sendReadByAddress(byte device_addr, byte high_address, byte low_address){
 
   Wire.beginTransmission(device_addr);
 
   Wire.write(high_address);
   Wire.write(low_address);
   
-  Wire.endTransmission();
+  return Wire.endTransmission();
 
 }
 
