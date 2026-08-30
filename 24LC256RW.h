@@ -1,5 +1,6 @@
 #ifndef WIRE_HEADER
   #define WIRE_HEADER
+  #define PAGE_SIZE 64
   #include <Wire.h>
 #endif 
 
@@ -157,7 +158,7 @@ int write1byte(byte device_addr, byte high_address, byte low_address, byte word)
  */
 int writePage(byte device_addr, byte high_address, byte low_address, byte words[], uint8_t length){
 
-  if(length > 64){
+  if(length > PAGE_SIZE){
     return -1;
   }
 
@@ -171,6 +172,77 @@ int writePage(byte device_addr, byte high_address, byte low_address, byte words[
     // Serial.print(words[i]);
   }
 
-  
   return Wire.endTransmission();
+}
+
+/** @brief アドレスカウンタを元に、現在のアドレスから読み込む命令を送信する
+ *
+ * @param device_addr I2Cデバイスのスレーブアドレス
+ */
+void sendReadCurrent(byte device_addr){
+
+  Wire.beginTransmission(device_addr);
+  Wire.endTransmission();
+
+}
+
+/** @brief 指定されたアドレスから読み込む命令を送信する
+ *
+ * @param device_addr I2Cデバイスのスレーブアドレス
+ * @param high_address 読み込み開始アドレスの高位バイト
+ * @param low_address 読み込み開始アドレスの低位バイト
+ */
+void sendReadByAddress(byte device_addr, byte high_address, byte low_address){
+
+  Wire.beginTransmission(device_addr);
+
+  Wire.write(high_address);
+  Wire.write(low_address);
+  
+  Wire.endTransmission();
+
+}
+
+/** @brief 指定されたアドレスから1バイトを読み込む処理を実行する。あらかじめ読み込み命令を送信している必要がある。
+ *
+ * @param device_addr I2Cデバイスのスレーブアドレス
+ * @return 読み込んだ1バイトのデータ
+ */
+byte receiveRead1byte(byte device_addr){
+
+  byte buf;
+  // 返信
+  Wire.requestFrom(device_addr, (uint8_t)1);
+
+  if (Wire.available() >= 1) {
+    buf = Wire.read();
+    
+  }
+
+  return buf;
+
+}
+
+/** @brief 指定されたアドレスから複数のバイトを読み込む処理を実行する。あらかじめ読み込み命令を送信している必要がある。
+ *
+ * @param device_addr I2Cデバイスのスレーブアドレス
+ * @param x 読み込むバイト数
+ * @param outBuf 読み込んだデータを格納する配列
+ */
+void receiveReadxbytes(byte device_addr, uint8_t x, byte* outBuf){
+
+  byte temp[x];
+
+  // 返信
+  Wire.requestFrom(device_addr,x);
+
+  if (Wire.available() >= 1) {
+    for(int i = 0; i < x ; i++){
+      temp[i] = Wire.read();
+      // Serial.print((char)outBuf[i]);
+    }
+
+  }
+
+  outBuf = temp;
 }
