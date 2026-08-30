@@ -1,9 +1,13 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <esp_mac.h>
-#ifndef EEPROM24LC256RW_HEADER
-  #define EEPROM24LC256RW_HEADER
-  #include "24LC256RW.h"
+// #ifndef EEPROM24LC256RW_HEADER
+//   #define EEPROM24LC256RW_HEADER
+//   #include "24LC256RW.h"
+// #endif 
+#ifndef EEPROM
+  #define EEPROM
+  #include "EEPROM.h"
 #endif 
 
 /** Wifi setting value */
@@ -25,44 +29,20 @@ void WifiAndWeb(){
 
   uint8_t baseMac[6];
   char baseMacChr[18] = {0};
-  char ssid[14] = {0};   // 12文字 + 終端
-  char pw[12] = {0};   // 12文字 + 終端
+
+  byte ssidBuf[33] = {'\0'};
+  byte pwBuf[65] = {'\0'};
 
   switch(WifiValue.Status){
     case 0:// Read SSID
       Serial.println("-------------------");
-      Serial.println("Read Wifi setting from 24LC256RW");
+      Serial.println("Read Wifi setting from EEPROM");
       Serial.println("-------------------");
 
-      for (int i = 0; i < 13; i++) {
-        ssid[i] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, i);
-      }
-      ssid[13] = '\0';      // 終端を明示
+      WifiValue.WIFI_SSID = receiveSSID();
 
-      WifiValue.WIFI_SSID = String(ssid);
+      WifiValue.WIFI_PASSWORD = receivePassword();
 
-      // Serial.print("ssid : ");Serial.println(WifiValue.WIFI_SSID);
-
-      WifiValue.Status = 1;
-      WifiValue.NextTime = currentTime + 100;
-
-    case 1:// Read PW
-      if(currentTime < WifiValue.NextTime) break;
-      // pw[0] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, 0x00);
-
-      for(int i = 0; i < 12 ; i++){
-        pw[i] = (char)read1byte(EEPROM24LC256_ADDR, 0x00, (0x30 + i));
-      }
-
-      pw[12] = '\0';
-
-      WifiValue.WIFI_PASSWORD = (String)pw;
-
-      WifiValue.Status = 10;
-      WifiValue.NextTime = currentTime + 100;
-
-    case 10:// Initializing
-      if(currentTime < WifiValue.NextTime) break;
       Serial.println("-------------------");
       Serial.print("Wifi SSID     : ");Serial.println(WifiValue.WIFI_SSID);
       Serial.print("Wifi Password : ");Serial.println(WifiValue.WIFI_PASSWORD);
@@ -92,7 +72,7 @@ void WifiAndWeb(){
 
         server.begin();
 
-        WifiValue.Status = 2;
+        WifiValue.Status = 30;
       }else{
         WifiValue.NextTime = currentTime + 1000;
 
@@ -107,7 +87,7 @@ void WifiAndWeb(){
       if(WiFi.status() != WL_CONNECTED){//Wifi connection lost
         Serial.println("Wifi connection lost");
         WifiValue.TryCount = 0;
-        WifiValue.Status = 1;
+        WifiValue.Status = 0;
         break;
       }
 
