@@ -101,13 +101,12 @@ void readxbytes(byte device_addr, byte high_address, byte low_address, uint8_t x
 
   if (Wire.available() >= 1) {
     for(int i = 0; i < x ; i++){
-      temp[i] = Wire.read();
+      outBuf[i] = Wire.read();
       // Serial.print((char)outBuf[i]);
     }
 
   }
 
-  outBuf = temp;
 }
 
 /**
