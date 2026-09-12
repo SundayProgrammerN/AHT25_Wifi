@@ -1,11 +1,6 @@
-#ifndef USER_SETTING_HEADER 
-  #define USER_SETTING_HEADER
-  #include "UserSetting.h"
-#endif 
-
-#ifndef AHT25_HEADER 
-  #define AHT25_HEADER
-  #include "AHT25.h"
+#ifndef WIRE_HEADER
+  #define WIRE_HEADER
+  #include <Wire.h>
 #endif 
 
 #ifndef WIFI_AND_WEB_HEADER
@@ -13,21 +8,21 @@
   #include "WifiAndWeb.h"
 #endif 
 
-#ifndef EEPROM24LC256RW_HEADER
-  #define EEPROM24LC256RW_HEADER
-  #include "24LC256RW.h"
+// TODO : 暫定
+#ifndef AHT25_HEADER 
+  #define AHT25_HEADER
+  #include "AHT25.h"
 #endif 
 
-#ifndef WIRE_HEADER
-  #define WIRE_HEADER
-  #define PAGE_SIZE 64 // TODO:24LC256RWのページサイズ。のちのち削除
-  #include <Wire.h>
-#endif 
+/** Time setting */
+const unsigned long TIME_LIMIT = 2592000000; // 30days
 
-#ifndef EEPROM
-  #define EEPROM
-  #include "EEPROM.h"
-#endif 
+/** AHT25 setting value */
+const int AHT25_PIN_I2C_SDA = 14;
+const int AHT25_PIN_I2C_SCL = 13;
+
+/** Serial setting value */
+const int SERIAL_BAUDRATE = 115200; // Baudrate for serial communication.
 
 void setI2CPins() {
   Wire.begin(AHT25_PIN_I2C_SDA, AHT25_PIN_I2C_SCL);

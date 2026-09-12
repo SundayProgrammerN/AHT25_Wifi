@@ -1,9 +1,9 @@
 #ifndef WIRE_HEADER
   #define WIRE_HEADER
-  #define PAGE_SIZE 64
   #include <Wire.h>
 #endif 
 
+#define PAGE_SIZE 64
 
 /**
  * @brief 現在の値を読み取る
@@ -229,7 +229,7 @@ byte receiveRead1byte(byte device_addr){
     buf = Wire.read();
     
   }else{
-    return NULL;
+    return 0;
   }
 
   return buf;

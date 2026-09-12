@@ -3,6 +3,8 @@
   #include "24LC256RW.h"
 #endif 
 
+const byte EEPROM24LC256_ADDR = 0b1010000; // I2C address of 24LC256RW
+
 /** @brief SSIDを受信する
  *
  * @return 受信したSSIDの文字列
