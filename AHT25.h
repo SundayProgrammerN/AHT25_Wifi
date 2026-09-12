@@ -2,6 +2,7 @@
   #define WIRE_HEADER
   #include <Wire.h>
 #endif 
+
 #ifndef CRC8_HEADER
   #define CRC8_HEADER
   #include <CRC8.h>
@@ -46,7 +47,6 @@ const int AHT25_ErrorReceiving_Status_Code = 99;
 const int AHT25_Error_Status_Code = 98;
 
 const int AHT25_Measurement_Interval = 2000;
-
 
 void AHT25(){
   byte buf[7];

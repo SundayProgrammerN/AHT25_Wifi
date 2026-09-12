@@ -1,10 +1,18 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <esp_mac.h>
+
 #ifndef EEPROM
   #define EEPROM
   #include "EEPROM.h"
 #endif 
+
+#ifndef AHT25_HEADER 
+  #define AHT25_HEADER
+  #include "AHT25.h"
+#endif 
+
+const int PORT = 80;                 // Port number as a webserver
 
 /** Wifi setting value */
 struct{
@@ -25,6 +33,9 @@ void WifiAndWeb(){
 
   uint8_t baseMac[6];
   char baseMacChr[18] = {0};
+
+  // Get tempereture and humidy values from AHT25
+  AHT25();
 
   switch(WifiValue.Status){
     case 0:// Initializing

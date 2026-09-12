@@ -8,12 +8,6 @@
   #include "WifiAndWeb.h"
 #endif 
 
-// TODO : 暫定
-#ifndef AHT25_HEADER 
-  #define AHT25_HEADER
-  #include "AHT25.h"
-#endif 
-
 /** Time setting */
 const unsigned long TIME_LIMIT = 2592000000; // 30days
 
